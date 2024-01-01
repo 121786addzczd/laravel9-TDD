@@ -75,7 +75,7 @@ php artisan make:test Http/controllers/PostListControllerTest
 ## マイグレーション
 マイグレーションを実行
 ```shell
-docker exec -it php-fpm bash -c "php artisan migrate:fresh --seed"
+docker exec -it php-fpm bash -c "php artisan migrate"
 ```
 
 前回のマイグレーションに戻す
