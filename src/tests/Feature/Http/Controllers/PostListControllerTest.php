@@ -27,7 +27,6 @@ class PostListControllerTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assert()
             ->assertSee('ブログのタイトル１')
             ->assertSee('ブログのタイトル２');
     }
