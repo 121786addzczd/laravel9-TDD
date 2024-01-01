@@ -72,3 +72,19 @@ php artisan make:test Http/controllers/PostListControllerTest
 ```
 
 
+## マイグレーション
+マイグレーションを実行
+```shell
+docker exec -it php-fpm bash -c "php artisan migrate:fresh --seed"
+```
+
+前回のマイグレーションに戻す
+```shell
+docker exec -it php-fpm bash -c "php artisan migrate:rollback"
+```
+
+seederでデータ投入(データベースのテーブルを削除し、その後新しいテーブルを作成)
+```shell
+docker exec -it php-fpm bash -c "php artisan migrate:fresh --seed"
+```
+

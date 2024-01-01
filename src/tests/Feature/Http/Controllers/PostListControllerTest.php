@@ -11,6 +11,8 @@ class PostListControllerTest extends TestCase
     /** @test */
     public function TOPページで、ブログ一覧が表示される()
     {
+        // $this->withoutExceptionHandling();
+
         $this->get('/')
             ->assertOk();
     }
