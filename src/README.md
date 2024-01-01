@@ -30,3 +30,45 @@ docker exec -it php-fpm bash -c "composer install"
 ```shell
 php artisan cache:clear && php artisan config:clear 
 ```
+
+
+## テスト実行方法
+
+全てのテストを実行
+```shell
+php artisan test
+```
+
+部分一致
+```shell
+php artisan test --filter クラス名やメソッド名
+```
+
+ファイル指定
+```
+php artisan test tests/Feature/ExampleTest.php
+```
+
+フォルダ指定
+```shell
+php artisan test tests/Feature
+```
+
+スイート名指定
+```shell
+php artisan test --testsuite Feature
+```
+
+コンテナの外から部分一致テストを実行する
+```shell
+docker exec -it php-fpm bash -c "php artisan test --filter TOPページで、ブログ一覧が表示される"
+```
+
+
+
+test用のファイルを生成するコマンド
+```shell
+php artisan make:test Http/controllers/PostListControllerTest
+```
+
+
