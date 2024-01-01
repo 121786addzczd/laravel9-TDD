@@ -26,9 +26,10 @@ class PostListControllerTest extends TestCase
         $post2 = Post::factory()->create(['title' => 'ブログのタイトル２']);
 
         $this->get('/')
-            ->assertOk()
             ->assertSee('ブログのタイトル１')
-            ->assertSee('ブログのタイトル２');
+            ->assertSee('ブログのタイトル２')
+            ->assertSee($post1->user->name)
+            ->assertSee($post2->user->name);
     }
 
 }

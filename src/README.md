@@ -71,6 +71,11 @@ test用のファイルを生成するコマンド
 php artisan make:test Http/controllers/PostListControllerTest
 ```
 
+Modelのテストファイル作成
+```shell
+php artisan make:test Models/PostTest
+```
+
 
 ## マイグレーション
 マイグレーションを実行
