@@ -39,6 +39,11 @@ php artisan cache:clear && php artisan config:clear
 php artisan test
 ```
 
+phpunitの場合(全てのテストを実行)
+```shell
+vendor/bin/phpunit
+```
+
 部分一致
 ```shell
 php artisan test --filter クラス名やメソッド名

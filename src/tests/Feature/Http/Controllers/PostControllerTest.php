@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -67,6 +68,24 @@ class PostControllerTest extends TestCase
             ->assertOk()
             ->assertSee($post->title)
             ->assertSee($post->user->name);
+    }
+
+    /** @test */
+    public function ブログの詳細画面にてコメントが古い順番で表示されていること()
+    {
+        $post = Post::factory()->create();
+
+        Comment::factory()->createMany([
+            ['created_at' => now()->sub('2 days'), 'name' => 'コメント太郎', 'post_id' => $post->id],
+            ['created_at' => now()->sub('3 days'), 'name' => 'コメント次郎', 'post_id' => $post->id],
+            ['created_at' => now()->sub('1 days'), 'name' => 'コメント三郎', 'post_id' => $post->id],
+        ]);
+
+        $this->get('posts/'.$post->id)
+            ->assertOk()
+            ->assertSee($post->title)
+            ->assertSee($post->user->name)
+            ->assertSeeInOrder(['コメント次郎', 'コメント太郎', 'コメント三郎']);
     }
 
     /** @test */
