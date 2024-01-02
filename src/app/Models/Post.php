@@ -21,4 +21,15 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * ステータスが「公開」のポストのみをクエリに含める。
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOnlyOpen($query)
+    {
+        return $query->where('status', self::OPEN);
+    }
 }

@@ -36,4 +36,18 @@ class PostFactory extends Factory
             ];
         });
     }
+
+    /**
+     * 非公開ステータスのpostインスタンスを作成
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+     */
+    public function closed()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => Post::CLOSED,
+            ];
+        });
+    }
 }

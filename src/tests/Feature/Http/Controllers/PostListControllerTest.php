@@ -12,7 +12,7 @@ class PostListControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function TOPページで、ブログ一覧が表示される()
+    public function TOPページで、ブログ一覧が表示されること()
     {
         // $this->withoutExceptionHandling();
 
@@ -40,6 +40,21 @@ class PostListControllerTest extends TestCase
                 '（3件のコメント）',
                 '（1件のコメント）',
             ]);
+    }
+
+    /** @test */
+    public function ブログの一覧で、非公開のブログは表示されないこと()
+    {
+        $post1 = Post::factory()->closed()->create([
+            'title' => 'これは非公開のブログです。',
+        ]);
+        $post2 = Post::factory()->create([
+            'title' => 'これは公開済みのブログです。',
+        ]);
+
+        $this->get('/')
+            ->assertDontSee('これは非公開のブログです。')
+            ->assertSee('これは公開済みのブログです。');
     }
 
 }
