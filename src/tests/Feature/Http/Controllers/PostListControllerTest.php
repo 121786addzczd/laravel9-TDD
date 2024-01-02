@@ -9,6 +9,8 @@ use Tests\TestCase;
 
 class PostListControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function TOPページで、ブログ一覧が表示される()
     {
