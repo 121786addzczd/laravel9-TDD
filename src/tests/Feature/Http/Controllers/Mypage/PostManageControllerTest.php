@@ -13,11 +13,12 @@ class PostManageControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    function ログインしていないユーザーはマイページを閲覧しようとするとログイン画面にリダイレクトされること()
+    function ログインしていないユーザーはブログを管理できないこと()
     {
         $loginUrl = 'mypage/login';
 
         $this->get('mypage/posts')->assertRedirect($loginUrl);
+        $this->get('mypage/posts/create')->assertRedirect($loginUrl);
     }
 
     /** @test */
@@ -39,7 +40,7 @@ class PostManageControllerTest extends TestCase
     /** @test */
     public function マイページで自分のブログのデータのみが表示されること()
     {
-        $user =$this->login();
+        $user = $this->login();
 
         $other = Post::factory()->create();
         $myPost = Post::factory()->create(['user_id' => $user->id]);
@@ -48,5 +49,14 @@ class PostManageControllerTest extends TestCase
             ->assertOk()
             ->assertDontSee($other->title)
             ->assertSee($myPost->title);
+    }
+
+    /** @test */
+    public function マイページでブログ新規登録画面が開けること()
+    {
+        $this->login();
+
+        $this->get('mypage/posts/create')
+            ->assertOk();
     }
 }
