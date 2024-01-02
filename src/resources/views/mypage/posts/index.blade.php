@@ -9,23 +9,26 @@
 <hr>
 
 
-{{-- <table>
+<table>
     <tr>
         <th>ブログ名</th>
     </tr>
     @foreach($posts as $post)
     <tr>
         <td>
+            {{ $post->title }}
+        </td>
+        {{-- <td>
             <a href="{{ route('mypage.post.edit', $post) }}">{{ $post->title }}</a>
         </td>
         <td>
             <form method="post" action="{{ route('mypage.post.delete', $post) }}">
                 @csrf @method('delete') <input type="submit" value="削除">
             </form>
-        </td>
+        </td> --}}
     </tr>
     @endforeach
-</table> --}}
+</table>
 
 
 @endsection
