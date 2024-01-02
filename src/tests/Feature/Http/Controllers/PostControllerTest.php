@@ -71,6 +71,10 @@ class PostControllerTest extends TestCase
     /** @test */
     public function ブログで非公開のものは、詳細表示されないこと()
     {
+        $post = Post::factory()->closed()->create();
+
+        $this->get('posts/'.$post->id)
+            ->assertForbidden();
 
     }
 }
