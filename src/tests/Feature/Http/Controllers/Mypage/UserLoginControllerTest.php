@@ -50,4 +50,33 @@ class UserLoginControllerTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
     }
+
+    /** @test */
+    public function パスワードが間違っている場合にログインできず、エラーメッセージが表示されること()
+    {
+        $url = 'mypage/login';
+
+        $user = User::factory()->create([
+            'email' => 'testuser@test.com',
+            'password' => Hash::make('hogehoge'),
+        ]);
+
+        $this->from($url)->post('mypage/login', [
+            'email' => 'testuser@test.com',
+            'password' => 'ほげほげ',
+        ])->assertRedirect($url);
+
+        $this->get($url)
+            ->assertOk()
+            ->assertSee('メールアドレスかパスワードが間違っています。');
+
+        // 以下も書き方もある assertRedirectは不要になる
+        $this->from($url)->followingRedirects()->post($url, [
+            'email' => 'testuser@test.com',
+            'password' => 'ほげほげ',
+        ])
+        ->assertOK()
+        ->assertSee('メールアドレスかパスワードが間違っています。')
+        ->assertSee('<h1>ログイン画面</h1>', false);
+    }
 }
