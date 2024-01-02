@@ -33,6 +33,9 @@ class SignupControllerTest extends TestCase
             'password' => 'hogehoge',
         ];
 
+        // $validData = User::factory()->raw();
+        // $validData = User::factory()->validData();
+
         $this->post('signup', $validData)
             ->assertOk();
 
