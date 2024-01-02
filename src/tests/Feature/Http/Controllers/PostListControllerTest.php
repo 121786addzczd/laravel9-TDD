@@ -22,14 +22,16 @@ class PostListControllerTest extends TestCase
         //     ->assertSee($post1->title)
         //     ->assertSee($post2->title);
 
-        $post1 = Post::factory()->create(['title' => 'ブログのタイトル１']);
-        $post2 = Post::factory()->create(['title' => 'ブログのタイトル２']);
+        $post1 = Post::factory()->hasComments(3)->create(['title' => 'ブログのタイトル１']);
+        $post2 = Post::factory()->hasComments(5)->create(['title' => 'ブログのタイトル２']);
 
         $this->get('/')
             ->assertSee('ブログのタイトル１')
             ->assertSee('ブログのタイトル２')
             ->assertSee($post1->user->name)
-            ->assertSee($post2->user->name);
+            ->assertSee($post2->user->name)
+            ->assertSee('（3件のコメント）')
+            ->assertSee('（5件のコメント）');
     }
 
 }
