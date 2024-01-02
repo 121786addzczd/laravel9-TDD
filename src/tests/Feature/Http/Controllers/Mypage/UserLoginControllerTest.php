@@ -118,4 +118,19 @@ class UserLoginControllerTest extends TestCase
             $this->fail('例外が発生してしまいましたよ。');
         }
     }
+
+    /** @test */
+    public function ログアウトできること()
+    {
+        $this->login();
+
+        $this->post('mypage/logout')
+            ->assertRedirect('mypage/login');
+
+        $this->get('mypage/login')
+            ->assertSee('ログアウトしました。');
+
+        // 未認証状態の確認
+        $this->assertGuest();
+    }
 }
