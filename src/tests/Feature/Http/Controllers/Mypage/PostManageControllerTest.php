@@ -59,4 +59,37 @@ class PostManageControllerTest extends TestCase
         $this->get('mypage/posts/create')
             ->assertOk();
     }
+
+    /** @test */
+    function マイページに新しい公開ブログを登録できること()
+    {
+        $this->withoutExceptionHandling();
+        [$windy, $me, $alice] = User::factory(3)->create();
+
+        $this->login($me);
+
+        $validData = [
+            'title' => '私のブログタイトル',
+            'body' => '私のブログ本文',
+            'status' => Post::OPEN,
+        ];
+
+        $response = $this->post('mypage/posts/create', $validData);
+
+        $post = Post::first();
+
+        $response->assertRedirect('mypage/posts/edit/'.$post->id);
+
+        $this->assertDatabaseHas('posts', array_merge($validData, ['user_id' => $me->id]));
+    }
+
+    /** @test */
+    function マイページ、ブログを新規登録できる、非公開の場合()
+    {
+    }
+
+    /** @test */
+    function マイページ、ブログの登録時の入力チェック()
+    {
+    }
 }
