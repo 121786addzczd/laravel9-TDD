@@ -189,6 +189,20 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function 自分以外のブログは更新できないこと()
     {
+        $validData = [
+            'title' => '新タイトル',
+            'body' => '新本文',
+            'status' => Post::CLOSED,
+        ];
+
+        $post = Post::factory()->create(['title' => '元のブログタイトル']);
+
+        $this->login();
+
+        $this->post('mypage/posts/edit/'.$post->id, $validData)
+            ->assertForbidden();
+
+        $this->assertSame('元のブログタイトル', $post->fresh()->title);
     }
 
     /** @test */
