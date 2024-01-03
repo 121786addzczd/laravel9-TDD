@@ -49,7 +49,6 @@ class PostManageController extends Controller
 
     public function update(Post $post, Request $request)
     {
-        // 所有チェック
         if (auth()->user()->isNot($post->user)) {
             abort(403);
         }
@@ -70,7 +69,9 @@ class PostManageController extends Controller
 
     public function destroy(Post $post)
     {
-        // 所有チェック TODO:あとで追加する
+        if (auth()->user()->isNot($post->user)) {
+            abort(403);
+        }
 
         $post->delete(); // 付随するコメントはDBの制約を使って削除する
 

@@ -215,7 +215,7 @@ class PostManageControllerTest extends TestCase
         $myPostComment = Comment::factory()->create(['post_id' => $post->id]);
         $otherPostComment = Comment::factory()->create();
 
-        $this->login();
+        $this->login($post->user);
 
         $this->delete('mypage/posts/delete/'.$post->id)
             ->assertRedirect('mypage/posts');
@@ -230,5 +230,13 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function 自分以外のブログは削除はできないこと()
     {
+        $post = Post::factory()->create();
+
+        $this->login();
+
+        $this->delete('mypage/posts/delete/'.$post->id)
+            ->assertForbidden();
+
+        $this->assertModelExists($post);
     }
 }
