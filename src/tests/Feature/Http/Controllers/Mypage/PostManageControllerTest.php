@@ -19,6 +19,7 @@ class PostManageControllerTest extends TestCase
 
         $this->get('mypage/posts')->assertRedirect($loginUrl);
         $this->get('mypage/posts/create')->assertRedirect($loginUrl);
+        $this->post('mypage/posts/create', [])->assertRedirect($loginUrl);
     }
 
     /** @test */
@@ -63,7 +64,7 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function マイページに新しい公開ブログを登録できること()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
         [$windy, $me, $alice] = User::factory(3)->create();
 
         $this->login($me);
@@ -86,6 +87,24 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function マイページ、ブログを新規登録できる、非公開の場合()
     {
+        // $this->markTestIncomplete();
+
+        [$windy, $me, $alice] = User::factory(3)->create();
+
+        $this->login($me);
+
+        $validData = [
+            'title' => '私のブログタイトル',
+            'body' => '私のブログ本文',
+            'status' => '',
+        ];
+
+        $this->post('mypage/posts/create', $validData);
+
+        $this->assertDatabaseHas('posts', array_merge($validData, [
+            'user_id' => $me->id,
+            'status' => Post::CLOSED,
+        ]));
     }
 
     /** @test */
