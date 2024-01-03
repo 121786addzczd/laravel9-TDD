@@ -19,7 +19,7 @@
             {{ $post->title }}
         </td>
         <td>
-            <a href="{{ route('mypage.post.edit', $post) }}">{{ $post->title }}</a>
+            <a href="{{ route('mypage.posts.edit', $post) }}">{{ $post->title }}</a>
         </td>
         {{--<td>
             <form method="post" action="{{ route('mypage.post.delete', $post) }}">
