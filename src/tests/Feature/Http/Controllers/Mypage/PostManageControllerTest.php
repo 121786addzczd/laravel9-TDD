@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Mypage;
 
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -21,6 +22,7 @@ class PostManageControllerTest extends TestCase
         $this->get('mypage/posts/create')->assertRedirect($loginUrl);
         $this->post('mypage/posts/create', [])->assertRedirect($loginUrl);
         $this->post('mypage/posts/edit/1', [])->assertRedirect($loginUrl);
+        $this->delete('mypage/posts/delete/1')->assertRedirect($loginUrl);
     }
 
     /** @test */
@@ -203,6 +205,26 @@ class PostManageControllerTest extends TestCase
             ->assertForbidden();
 
         $this->assertSame('元のブログタイトル', $post->fresh()->title);
+    }
+
+    /** @test */
+    function 自分のブログは削除はできる、かつ不随するコメントも削除されること()
+    {
+        $post = Post::factory()->create();
+
+        $myPostComment = Comment::factory()->create(['post_id' => $post->id]);
+        $otherPostComment = Comment::factory()->create();
+
+        $this->login();
+
+        $this->delete('mypage/posts/delete/'.$post->id)
+            ->assertRedirect('mypage/posts');
+
+        // ブログの削除の確認
+        $this->assertModelMissing($post);
+        // コメントの削除の確認
+        $this->assertModelMissing($myPostComment);
+        $this->assertModelExists($otherPostComment);
     }
 
     /** @test */
