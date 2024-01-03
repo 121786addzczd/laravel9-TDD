@@ -18,10 +18,10 @@
         <td>
             {{ $post->title }}
         </td>
-        {{-- <td>
+        <td>
             <a href="{{ route('mypage.post.edit', $post) }}">{{ $post->title }}</a>
         </td>
-        <td>
+        {{--<td>
             <form method="post" action="{{ route('mypage.post.delete', $post) }}">
                 @csrf @method('delete') <input type="submit" value="削除">
             </form>

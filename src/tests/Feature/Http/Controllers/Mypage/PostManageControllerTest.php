@@ -124,4 +124,36 @@ class PostManageControllerTest extends TestCase
         $this->post($url, ['title' => str_repeat('a', 255)])->assertValid('title');
         $this->post($url, ['body' => ''])->assertInvalid(['body' => 'required']);
     }
+
+    /** @test */
+    function 自分のブログの編集画面は開けること()
+    {
+        $post = Post::factory()->create();
+
+        $this->login($post->user);
+
+        $this->get('mypage/posts/edit/'.$post->id)
+            ->assertOk();
+    }
+
+    /** @test */
+    function 自分以外のブログの編集画面は開けないこと()
+    {
+        $post = Post::factory()->create();
+
+        $this->login();
+
+        $this->get('mypage/posts/edit/'.$post->id)
+            ->assertForbidden();
+    }
+
+    /** @test */
+    function 自分以外のブログは更新できないこと()
+    {
+    }
+
+    /** @test */
+    function 自分以外のブログは削除はできないこと()
+    {
+    }
 }
