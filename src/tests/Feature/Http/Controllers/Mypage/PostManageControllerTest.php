@@ -20,6 +20,7 @@ class PostManageControllerTest extends TestCase
         $this->get('mypage/posts')->assertRedirect($loginUrl);
         $this->get('mypage/posts/create')->assertRedirect($loginUrl);
         $this->post('mypage/posts/create', [])->assertRedirect($loginUrl);
+        $this->post('mypage/posts/edit/1', [])->assertRedirect($loginUrl);
     }
 
     /** @test */
@@ -145,6 +146,44 @@ class PostManageControllerTest extends TestCase
 
         $this->get('mypage/posts/edit/'.$post->id)
             ->assertForbidden();
+    }
+
+    /** @test */
+    function 自分のブログは更新できること()
+    {
+        $validData = [
+            'title' => '新タイトル',
+            'body' => '新本文',
+            'status' => Post::CLOSED,
+        ];
+
+        $post = Post::factory()->create();
+
+        $this->login($post->user);
+
+        $this->post('mypage/posts/edit/'.$post->id, $validData)
+            ->assertRedirect('mypage/posts/edit/'.$post->id);
+
+        $this->get('mypage/posts/edit/'.$post->id)
+            ->assertSee('ブログを更新しました');
+
+        // DBに登録されている事を確認
+        $this->assertDatabaseHas('posts', $validData);
+
+        // 新規で追加されたかも知れないため個数の確認
+        $this->assertCount(1, Post::all());
+        $this->assertSame(1, Post::count());
+
+        // キャッシュをクリアして最新のデータを取得（項目が少ない場合）
+        $this->assertSame('新タイトル', $post->fresh()->title);
+        $this->assertSame('新本文', $post->fresh()->body);
+
+        // キャッシュをクリアして最新のデータを取得（項目が多い場合）
+        $post->refresh();
+        $this->assertSame('新本文', $post->body);
+        $this->assertSame('新本文', $post->body);
+        $this->assertSame('新本文', $post->body);
+        // 他の項目も同様に繰り返し確認
     }
 
     /** @test */
